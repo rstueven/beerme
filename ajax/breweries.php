@@ -34,16 +34,18 @@ $select .= " ORDER BY b._id DESC";
 
 $query = $db->query($select) or die(mysql_error() . "<br/>{$select}");
 
-while ($record = $query->fetch_array()) {
+$breweries = [];
 
+while ($record = $query->fetch_array()) {
+  $brewery = [];
   list ($breweryid, $name, $address1, $city, $state, $country, $latitude, $longitude, $status, $hours, $telcode, $phone, $public, $bar, $beergarden, $food, $giftshop, $hotel, $internet, $retail, $tours, $updated) = $record;
 
-  echo $breweryid . "|";
-  echo $name . "|";
-  echo address($address1, $city, $state, $country) . "|";
-  echo $latitude . "|";
-  echo $longitude . "|";
-  echo $status . "|";
+  $brewery["id"] = $breweryid;
+  $brewery["name"] = $name;
+  $brewery["address"] = address($address1, $city, $state, $country);
+  $brewery["latitude"] = $latitude;
+  $brewery["longitude"] = $longitude;
+  $brewery["status"] = $status;
 
   $svc = 0;
   if ($public)
@@ -64,33 +66,23 @@ while ($record = $query->fetch_array()) {
     $svc += RETAIL;
   if ($tours)
     $svc += TOURS;
-  echo $svc . "|";
 
-  echo $updated . "|";
+  $brewery["services"] = $svc;
+
+  $brewery["updated"] = $updated;
 
   if (! is_null($phone))
-    // echo preg_replace('/ /', "-", "+{$telcode} {$phone}");
-    echo "+{$telcode} {$phone}";
-  echo "|";
+    $brewery["phone"] = "+{$telcode} {$phone}";
 
   if (! is_null($hours))
-    echo $hours;
-  echo "|";
+    $brewery["hours"] = $hours;
 
   $webSelect = "SELECT trim(replace(url, '\\r\\n', ' ')) FROM web WHERE breweryid = {$breweryid} AND url NOT LIKE '%facebook.com%' LIMIT 1";
   $webQuery = $db->query($webSelect) or die(mysql_error() . "<br/>{$webSelect}");
   if ($webQuery->num_rows == 1) {
     $webRecord = $webQuery->fetch_array();
-    $urlFixed = str_replace(array(
-      "http://",
-      "https://"
-    ), array(
-      "",
-      ""
-    ), $webRecord[0]);
-    echo $urlFixed;
+    $brewery["url"] = $webRecord[0];
   }
-  echo "|";
 
   $webQuery->free_result();
 
@@ -104,13 +96,14 @@ while ($record = $query->fetch_array()) {
   }
   if ($beermatFile != "") {
     $beermatFile = str_replace($docroot, "https://beerme.com", $beermatFile);
-    echo $beermatFile;
+    $brewery["graphics"] = $beermatFile;
   }
-  echo "|";
 
-  echo "\n";
+  $breweries[] = $brewery;
 }
 
 $query->free_result();
 require_once '../inc/dbdisconnect.php';
+
+echo json_encode($breweries);
 ?>
