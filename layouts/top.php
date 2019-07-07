@@ -40,47 +40,84 @@ var map;
 var mapLat = 41.25;
 var mapLng = -95.9;
 var mapDefaultZoom = 10;
+
 function initialize_map() {
-map = new ol.Map({
-target: "map",
-layers: [
-new ol.layer.Tile({
-source: new ol.source.OSM({
-url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
-})
-})
-],
-view: new ol.View({
-center: ol.proj.fromLonLat([mapLng, mapLat]),
-zoom: mapDefaultZoom
-})
-});
+	map = new ol.Map({
+		target: "map",
+		layers: [
+			new ol.layer.Tile({
+				source: new ol.source.OSM({
+					url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
+				})
+			})
+		],
+		view: new ol.View({
+			center: ol.proj.fromLonLat([mapLng, mapLat]),
+			zoom: mapDefaultZoom
+		})
+	});
+
+	var container = document.getElementById('popup');
+	var content = document.getElementById('popup-content');
+	var closer = document.getElementById('popup-closer');
+
+	var overlay = new ol.Overlay({
+		element: container,
+    autoPan: true,
+    autoPanAnimation: {
+        duration: 250
+    }
+	});
+
+	map.addOverlay(overlay);
+
+	closer.onclick = function() {
+    overlay.setPosition(undefined);
+    closer.blur();
+    return false;
+	};
+
+	map.on('singleclick', function (event) {
+		var pixel = event.pixel;
+
+		if (map.hasFeatureAtPixel(pixel) === true) {
+			var coordinate = event.coordinate;
+			map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+				content.innerHTML = feature.get("name");
+				overlay.setPosition(coordinate);
+			});
+		} else {
+			overlay.setPosition(undefined);
+			closer.blur();
+		}
+	});
 }
+
 function add_map_point(lat, lng, name) {
-var vectorLayer = new ol.layer.Vector({
-source:new ol.source.Vector({
-features: [new ol.Feature({
-  name: name,
-geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
-})]
-}),
-style: new ol.style.Style({
-image: new ol.style.Icon({
-anchor: [0.5, 0.5],
-anchorXUnits: "fraction",
-anchorYUnits: "fraction",
-src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
-})
-})
-});
-map.addLayer(vectorLayer);
+	var vectorLayer = new ol.layer.Vector({
+		source:new ol.source.Vector({
+			features: [new ol.Feature({
+				name: name,
+				geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
+			})]
+		}),
+		style: new ol.style.Style({
+			image: new ol.style.Icon({
+				anchor: [0.5, 0.5],
+				anchorXUnits: "fraction",
+				anchorYUnits: "fraction",
+				src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
+			})
+		})
+	});
+
+	map.addLayer(vectorLayer);
 }
-  </script>
+</script>
 
 </head>
 
 <body>
 <?php
-
 include 'inc/dbconnect.php';
 ?>
