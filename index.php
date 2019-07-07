@@ -86,6 +86,5 @@ $(function() {
 ?>
 
 <?php
-
 include 'layouts/bottom.php';
 ?>
