@@ -1,11 +1,21 @@
-<?php echo "<?xml version='1.0' encoding='utf-8'?>"; ?>
+<?php
+echo "<?xml version='1.0' encoding='utf-8'?>";
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Beer Me! &mdash; <?php echo $documentTitle; ?></title>
+<title>Beer Me! &mdash; <?php
+
+echo $documentTitle;
+?></title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta http-equiv="Content-Style-Type" content="text/css" />
+
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Bootstrap -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
@@ -14,6 +24,8 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous" type=""></script>
+
+<!-- Beer Me! -->
 <!-- link type='text/css' rel='stylesheet' href='/css/beerme.css' /-->
 
 
@@ -66,18 +78,18 @@ map.addLayer(vectorLayer);
 
 </head>
 
-<body onload="initialize_map(); add_map_point(41.25, -95.9);">
-<?php 
+<body>
+<?php
 // Database connection
-$mysqli = new mysqli("localhost", "beerme_db", "kE19s#t5", "beerme_db", 3306);
+$db = new mysqli("localhost", "beerme_db", "kE19s#t5", "beerme_db", 3306);
 
-if ($mysqli->connect_errno) {
-    printf("Failed to connect to MySQL: (%s) %s", $mysqli->connect_errno, $mysqli->connect_error);
-    echo "</body></html>";
-    exit();
+if ($db->connect_errno) {
+  printf("Failed to connect to MySQL: (%s) %s", $db->connect_errno, $db->connect_error);
+  echo "</body></html>";
+  exit();
 }
 
-if (!$mysqli->set_charset("utf8")) {
-    printf("Error loading character set utf8: %s\n", $mysqli->error);
+if (! $db->set_charset("utf8")) {
+  printf("Error loading character set utf8: %s\n", $db->error);
 }
 ?>
