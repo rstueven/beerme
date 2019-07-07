@@ -56,10 +56,11 @@ zoom: mapDefaultZoom
 })
 });
 }
-function add_map_point(lat, lng) {
+function add_map_point(lat, lng, name) {
 var vectorLayer = new ol.layer.Vector({
 source:new ol.source.Vector({
 features: [new ol.Feature({
+  name: name,
 geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
 })]
 }),
