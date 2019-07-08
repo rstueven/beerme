@@ -8,8 +8,8 @@ include 'layouts/top.php';
 <h1>BEER ME!</h1>
 
 <div id="map" style="width: 100vw; height: 100vh;"></div>
-<div id="popup" class="ol-popup">
-     <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+<div id="popup" class="ol-popup" style="background: white; padding: 5px;">
+     <a id="popup-closer" class="ol-popup-closer"></a>
      <div id="popup-content"></div>
  </div>
 

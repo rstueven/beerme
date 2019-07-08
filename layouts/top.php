@@ -78,14 +78,28 @@ function initialize_map() {
 	};
 
 	map.on('singleclick', function (event) {
+		const MAX_ITEMS = 5;
 		var pixel = event.pixel;
 
 		if (map.hasFeatureAtPixel(pixel) === true) {
 			var coordinate = event.coordinate;
-			map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-				content.innerHTML = feature.get("name");
-				overlay.setPosition(coordinate);
+			var features = map.getFeaturesAtPixel(pixel);
+
+			var label = [];
+
+			$.each(features, function(i, feature) {
+				label.push(feature.get("name"));
+				if (i == MAX_ITEMS) {
+					return false;
+				}
 			});
+
+			if (features.length > MAX_ITEMS) {
+				label.push("+ " + (features.length - MAX_ITEMS) + " more");
+			}
+
+			content.innerHTML = label.join("<br>");
+			overlay.setPosition(coordinate);
 		} else {
 			overlay.setPosition(undefined);
 			closer.blur();
