@@ -1,24 +1,30 @@
 <?php
 function address($a, $c, $s, $l)
 {
-    $r = "";
+  $r = "";
 
-    if ($a) $r .= "{$a}, ";
+  if ($a) {
+    $r .= "{$a}, ";
+  }
 
-    $r .= "{$c}, ";
+  $r .= "{$c}, ";
 
-    if ($l == "United States" || $l == "Canada")
-        $r .= $s;
-    else
-        $r .= $l;
+  if ($l == "United States" || $l == "Canada") {
+    $r .= $s;
+  } else {
+    $r .= $l;
+  }
 
-    return $r;
+  return $r;
 }
 
 function boolToText($b)
 {
-    if ($b) return "true";
-    else return "false";
+  if ($b) {
+    return "true";
+  } else {
+    return "false";
+  }
 }
 
 // Services
