@@ -116,10 +116,10 @@ require_once 'db/dbconnect.php';
                   <?php
                   // TODO: Scrollable list, load new items at scroll end
                   $select
-                    = "SELECT source, url, DATE_FORMAT(newsdate, '%M %d, %Y') AS newsdate, title FROM news ORDER BY newsdate DESC LIMIT 10";
+                    = "SELECT source, url, DATE_FORMAT(newsdate, '%M %d, %Y') AS newsdate_fmt, title FROM news ORDER BY newsdate DESC LIMIT 10";
                   $result = $dbConnection->query($select);
                   while ($row = $result->fetch(PDO::FETCH_OBJ)) {
-                    echo "<li><a href='{$row->url}'>{$row->title}</a><br/>({$row->source} &mdash; {$row->newsdate})</li>\n";
+                    echo "<li><a href='{$row->url}'>{$row->title}</a><br/>({$row->source} &mdash; {$row->newsdate_fmt})</li>\n";
                   }
                   $result->closeCursor();
                   ?>
