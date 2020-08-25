@@ -31,7 +31,7 @@ Map.init = function (lat, lng, zoom) {
 
   navigator.geolocation.watchPosition(function (pos) {
     console.log(pos.coords.longitude + " : " + pos.coords.latitude + " : " + pos.coords.accuracy);
-    // map.getView().setCenter(ol.proj.fromLonLat([pos.coords.longitude, pos.coords.latitude]));
+    map.getView().setCenter(ol.proj.fromLonLat([pos.coords.longitude, pos.coords.latitude]));
     const coords = [pos.coords.longitude, pos.coords.latitude];
     const accuracy = ol.geom.Polygon.circular(new ol.Sphere(6378137), coords, pos.coords.accuracy);
     source.clear(true);
