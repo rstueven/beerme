@@ -19,6 +19,8 @@ require_once 'db/dbconnect.php';
   <div class="content">
     <h1>Beer List</h1>
 
+    <!-- TRY THIS? https://stackoverflow.com/a/37260016 -->
+
     <div class="table-responsive-scroll">
       <table>
         <tr>
@@ -54,7 +56,9 @@ require_once 'db/dbconnect.php';
 </main>
 <?php require_once 'db/dbdisconnect.php'; ?>
 <script>
-  TableSortable.init();
+  $(function () {
+    TableSortable.init();
+  });
 </script>
 </body>
 </html>

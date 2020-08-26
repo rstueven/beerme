@@ -22,18 +22,11 @@ require_once 'db/dbconnect.php';
 
     <div class="row">
       <div class="col-12 col-md-6">
-        <h1>New Breweries</h1>
+        <h1>New Brewery Listings</h1>
         <ul>
           <?php
-          // TODO: Scrollable list, load new items at scroll end
-          $select = "SELECT MAX(dateEntered) FROM brewery";
-          $result = $dbConnection->query($select);
-          $row = $result->fetch(PDO::FETCH_NUM);
-          $date = $row[0];
-          $result->closeCursor();
-
           $select
-            = "SELECT b._id, b.name, b.city, b.dateEntered, a.nom AS state, c.nom AS country FROM brewery b INNER JOIN administrativearea a ON b.region=a._id INNER JOIN country c ON a.country=c.country WHERE b.status != 'Deleted' AND b.dateEntered = '{$date}' ORDER BY b.dateEntered DESC";
+            = "SELECT b._id, b.name, b.city, b.dateEntered, a.nom AS state, c.nom AS country FROM brewery b INNER JOIN administrativearea a ON b.region=a._id INNER JOIN country c ON a.country=c.country WHERE b.status != 'Deleted' ORDER BY b.dateEntered DESC, b._id DESC LIMIT 10";
           $result = $dbConnection->query($select);
           while ($row = $result->fetch(PDO::FETCH_OBJ)) {
             echo "<li><a href='/brewery.php?{$row->_id}'>{$row->name}</a><br>{$row->city}, ";
@@ -45,8 +38,10 @@ require_once 'db/dbconnect.php';
           $result->closeCursor();
           ?>
         </ul>
+        <p class="text-right"><a href="/newbrewerylistings.php">more new brewery listings...</a></p>
 
       </div>
+
       <div class="col-12 col-md-6">
         <h1>Brewery Updates</h1>
         <ul>
